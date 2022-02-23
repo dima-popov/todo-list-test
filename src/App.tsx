@@ -2,39 +2,53 @@
 import * as React from 'react';
 import {
   Container, Card, CardContent, Divider, Checkbox, Stack, Button,
-  Typography, TextField, Box, IconButton,
+  Typography, TextField, Box, IconButton, List, ListItem, Tooltip,
 } from '@mui/material';
 import { Delete, Create } from '@mui/icons-material';
 
-export interface HelloWorldProps {
+export interface AppProps {
   userName: string;
   lang: string;
 }
 
-const list = [
+interface TodoList {
+  text: string;
+  id: symbol;
+  date: Date,
+  ready: boolean
+}
 
- {
-  date: {d: 1, y: 2, t: 3},
-  text: 'text 1',
-  ready: false,
-  id: 1
-    },
-     {
-      date: {d: 1, y: 2, t: 3},
-      text: 'text 2',
-      ready: false,
-      id: 2
-        },
-        {
-          date: {d: 1, y: 2, t: 3},
-          text: 'text 3',
-          ready: false,
-          id: 3
-            }
+const list:TodoList[] = [
 
-          ];
+  {
+    date: new Date(),
+    text: 'text 1',
+    ready: false,
+    id: Symbol(),
+  },
+  {
+    date: new Date(),
+    text: 'text 2',
+    ready: false,
+    id: Symbol(),
+  },
+  {
+    date: new Date(),
+    text: 'text 3',
+    ready: false,
+    id: Symbol(),
+  },
 
-export function App(props: HelloWorldProps) {
+];
+
+function App(props: AppProps) {
+  const [list_state, setList] = React.useState(list);
+  const [input_state, setInput] = React.useState('');
+
+  React.useEffect(() => {
+    console.log(list_state);
+  }, [list_state]);
+
   return (
     <Container sx={{ marginTop: '60px' }}>
 
@@ -45,49 +59,56 @@ export function App(props: HelloWorldProps) {
           </Typography>
           <Divider />
           <br />
-          <Stack spacing={2}>
-    
-        { list.map(function(element, i) {
-            return (
-            <div>
-            <Box key={i} sx={{ display: 'flex'}}>
-            <Box sx={{flexGrow: 1}}>
-              <Typography variant="body1" component="span">
-              {element.text}
-              </Typography>
-              </Box>
-              <Box >
-              <Checkbox />
-              <IconButton aria-label="create" color="primary"><Create /></IconButton>
-              <IconButton aria-label="delete" color="primary"><Delete /></IconButton>
-              </Box>
-        
-              </Box>
-              <Divider />
-              </div>
-              )
+          <List>
 
-          })
-          
-          
-          }
+            { list_state.map((elm, i) => (
 
-          
-         
-           
+              <ListItem key={i} sx={{ display: 'flex' }}>
+                <Box sx={{ flexGrow: 1 }}>
+                  <Tooltip title={elm.date.getDate()} placement="top">
+                    <Typography variant="body1" component="span">
+                      {elm.text}
+                    </Typography>
+                  </Tooltip>
+                </Box>
+                <Box>
+                  <Checkbox />
+                  <IconButton aria-label="create" color="primary"><Create /></IconButton>
+                  <IconButton aria-label="delete" color="primary"><Delete sx={{ color: 'red' }} /></IconButton>
+                </Box>
 
-          </Stack>
+              </ListItem>
+
+            ))}
+
+          </List>
           <br />
           <Divider />
           <br />
-          <Box
-            component="form"
-          >
-            <TextField id="outlined-basic" label="Outlined" variant="outlined" />
-            <Button variant="contained">ADD</Button>
-          </Box>
+          <Stack direction="row" spacing={2}>
+            <TextField
+              id="outlined-basic"
+              label="new task"
+              variant="outlined"
+              onChange={(event) => { setInput(event.target.value); }}
+            />
+            <Button
+              variant="contained"
+              onClick={
+  () => {
+    setList([{
+      text: input_state, ready: false, id: Symbol(), date: new Date(),
+    }, ...list_state]);
+  }
+ }
+            >
+              ADD
+            </Button>
+          </Stack>
         </CardContent>
       </Card>
     </Container>
   );
 }
+
+export { App };
