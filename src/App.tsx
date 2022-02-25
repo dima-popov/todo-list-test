@@ -2,7 +2,7 @@
 import * as React from 'react';
 import {
   Container, Card, CardContent, Divider, Checkbox, Stack, Button,
-  Typography, TextField, Box, IconButton, List, ListItem, Tooltip,
+  Typography, TextField, Box, IconButton, List, ListItem, Tooltip, listItemAvatarClasses,
 } from '@mui/material';
 import { Delete, Create } from '@mui/icons-material';
 
@@ -18,37 +18,39 @@ interface TodoList {
   ready: boolean
 }
 
-const list:TodoList[] = [
+const list:[number, TodoList][] = [
 
-  {
+  [Date.now(), {
     date: new Date(),
     text: 'text 1',
-    ready: false,
+    ready: true,
     id: Symbol(),
-  },
-  {
+  }],
+  [Date.now(), {
     date: new Date(),
     text: 'text 2',
     ready: false,
     id: Symbol(),
-  },
-  {
+  }],
+  [Date.now(), {
     date: new Date(),
     text: 'text 3',
     ready: false,
     id: Symbol(),
-  },
+  }],
 
 ];
 
 function App(props: AppProps) {
-  const [list_state, setList] = React.useState(list);
-  const [input_state, setInput] = React.useState('');
+  const [listState, setList] = React.useState(list);
+  const [inputState, setInput] = React.useState('');
 
   React.useEffect(() => {
-    console.log(list_state);
-  }, [list_state]);
-
+    // console.log(listState);
+  }, [listState]);
+  const sortedList = listState;
+  sortedList.sort();
+  sortedList.reverse();
   return (
     <Container sx={{ marginTop: '60px' }}>
 
@@ -61,25 +63,39 @@ function App(props: AppProps) {
           <br />
           <List>
 
-            { list_state.map((elm, i) => (
+            {
+            sortedList.map((elmArr, i) => {
+              const elm = elmArr[1];
+              return (
+                <ListItem key={i} sx={{ display: 'flex' }}>
+                  <Box sx={{ flexGrow: 1 }}>
+                    <Tooltip title={elm.date.toDateString()} placement="top">
+                      <Typography variant="body1" component="span">
+                        {elm.ready == true ? <s>{elm.text}</s> : elm.text }
+                      </Typography>
+                    </Tooltip>
+                  </Box>
+                  <Box>
 
-              <ListItem key={i} sx={{ display: 'flex' }}>
-                <Box sx={{ flexGrow: 1 }}>
-                  <Tooltip title={elm.date.getDate()} placement="top">
-                    <Typography variant="body1" component="span">
-                      {elm.text}
-                    </Typography>
-                  </Tooltip>
-                </Box>
-                <Box>
-                  <Checkbox />
-                  <IconButton aria-label="create" color="primary"><Create /></IconButton>
-                  <IconButton aria-label="delete" color="primary"><Delete sx={{ color: 'red' }} /></IconButton>
-                </Box>
+                    <Checkbox
+                      checked={elm.ready}
+                      data-id={elm.id}
+                      onChange={(event) => { elm.ready = event.target.checked; setList([...listState]); }}
+                    />
+                    <IconButton aria-label="create" color="primary"><Create /></IconButton>
+                    <IconButton
+                      aria-label="delete"
+                      color="primary"
+                      onClick={(event) => { setList([...listState.filter((e, i) => e[1] != elm)]); }}
+                    >
+                      <Delete sx={{ color: 'red' }} />
+                    </IconButton>
+                  </Box>
 
-              </ListItem>
-
-            ))}
+                </ListItem>
+              );
+            })
+}
 
           </List>
           <br />
@@ -96,9 +112,9 @@ function App(props: AppProps) {
               variant="contained"
               onClick={
   () => {
-    setList([{
-      text: input_state, ready: false, id: Symbol(), date: new Date(),
-    }, ...list_state]);
+    setList([[Date.now(), {
+      text: inputState, ready: false, id: Symbol(), date: new Date(),
+    }], ...listState]);
   }
  }
             >
