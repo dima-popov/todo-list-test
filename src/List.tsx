@@ -6,6 +6,7 @@ import {
 } from '@mui/material';
 import { Delete, Create } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
+import { store } from './store';
 
 export interface AppProps {
   userName: string;
@@ -50,6 +51,8 @@ function ListForm(props: AppProps) {
   React.useEffect(() => {
     // console.log(listState);
     sortedList.sort((a, b) => b[0] - a[0]);
+
+    store.subscribe(() => setInput(store.getState().inputValue));
   }, [listState]);
 
   return (
@@ -107,7 +110,7 @@ function ListForm(props: AppProps) {
               id="outlined-basic"
               label="new task"
               variant="outlined"
-              onChange={(event) => { setInput(event.target.value); }}
+              onChange={(event) => { store.dispatch({ type: 'input/update', payload: event.target.value }); }}
             />
             <Button
               variant="contained"
