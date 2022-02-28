@@ -24,7 +24,7 @@ function Edit(props:any) {
 
     <Container sx={{ marginTop: '60px' }}>
 
-      <Card variant="outlined" sx={{ width: 500, margin: 'auto', backgroundColor: 'rgb(255,120,120)' }}>
+      <Card variant="outlined" sx={{ width: 500, margin: 'auto', backgroundColor: '#fffe92' }}>
         <CardContent>
 
           <Typography variant="h6" component="h1">
@@ -34,6 +34,7 @@ function Edit(props:any) {
           <br />
           <Stack direction="row" spacing={2}>
             <TextField
+              autoFocus
               id="outlined-basic"
               label="edit task"
               variant="outlined"
@@ -43,6 +44,8 @@ function Edit(props:any) {
             <Button
               variant="contained"
               onClick={() => {
+                if (confirm("Are you sure you want to edit this item?") == true) {
+                  
                 store.getState().listValue.forEach((elm) => {
                   if (elm[1].id == id) {
                     elm[1].text = value;
@@ -51,6 +54,7 @@ function Edit(props:any) {
                 });
 
                 navigate('/');
+              }
               }}
             >
               Save

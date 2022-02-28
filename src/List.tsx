@@ -69,7 +69,11 @@ function ListForm(props:any) {
                     <IconButton
                       aria-label="delete"
                       color="primary"
-                      onClick={(event) => { store.dispatch({ type: 'list/delete', payload: elm }); }}
+                      onClick={(event) => { 
+                        if (confirm("Are you sure you want to delete this item?") == true) {
+                        store.dispatch({ type: 'list/delete', payload: elm }); 
+                        }
+                      }}
                     >
                       <Delete sx={{ color: 'red' }} />
                     </IconButton>
