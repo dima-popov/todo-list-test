@@ -9,25 +9,24 @@ import { Delete, Create } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import { store } from './store';
 
-export interface AppProps {
-  userName: string;
-  lang: string;
-}
-
-function ListForm(props: AppProps) {
+function ListForm(props:any) {
   const [listState, setList] = React.useState(store.getState().listValue);
   const [inputState, setInput] = React.useState('');
   const sortedList = listState;
   sortedList.sort((a, b) => b[0] - a[0]);
-  store.subscribe(() => setInput(store.getState().inputValue));
-  store.subscribe(() => {
-    localStorage.setItem('todoList', JSON.stringify(store.getState().listValue));
-    return setList(store.getState().listValue);
+  const setInputUnsubscribe = store.subscribe(() => setInput(store.getState().inputValue));
+  const setListUnsubscribe = store.subscribe(() => {
+    setList(store.getState().listValue);
   });
 
-  React.useEffect(() => {
-    console.log(store.getState());
-  }, [listState]);
+  React.useEffect(
+    () =>
+    // console.log(store.getState());
+
+      () => { setInputUnsubscribe(); setListUnsubscribe(); },
+
+    [listState],
+  );
 
   return (
     <Container sx={{ marginTop: '60px' }}>
@@ -45,7 +44,7 @@ function ListForm(props: AppProps) {
             sortedList.map((elmArr, i) => {
               const elm = elmArr[1];
               return (
-                <ListItem key={i} sx={{ display: 'flex' }}>
+                <ListItem key={elm.id} sx={{ display: 'flex' }}>
                   <Box sx={{ flexGrow: 1, overflow: 'auto' }}>
                     <Tooltip title={elm.date} placement="top">
                       <Typography variant="body1" component="span">
@@ -59,7 +58,14 @@ function ListForm(props: AppProps) {
                       checked={elm.ready}
                       onChange={(event) => { elm.ready = event.target.checked; store.dispatch({ type: 'list/update' }); }}
                     />
-                    <Link to="/edit"><IconButton aria-label="create" color="primary"><Create /></IconButton></Link>
+                    <Link to={{
+                      pathname: '/edit',
+                      search: `?id=${elm.id}`,
+                    }}
+
+                    >
+                      <IconButton aria-label="create" color="primary"><Create /></IconButton>
+                    </Link>
                     <IconButton
                       aria-label="delete"
                       color="primary"
@@ -85,6 +91,14 @@ function ListForm(props: AppProps) {
               variant="outlined"
               value={inputState}
               onChange={(event) => { store.dispatch({ type: 'input/update', payload: event.target.value }); }}
+
+              onKeyDown={
+                (event) => {
+                if (event.keyCode === 13) {
+                  store.dispatch({ type: 'list/add' });
+                }
+              }
+            }
             />
             <Button
               variant="contained"
