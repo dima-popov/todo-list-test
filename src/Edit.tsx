@@ -2,9 +2,8 @@
 import * as React from 'react';
 import {
   Container, Card, CardContent, Divider, Stack, Button,
-TextField,
+  TextField, Typography,
 } from '@mui/material';
-
 
 export interface AppProps {
   userName: string;
@@ -15,10 +14,12 @@ function Edit(props: AppProps) {
   return (
     <Container sx={{ marginTop: '60px' }}>
 
-      <Card variant="outlined" sx={{ width: 500, margin: 'auto' }}>
+      <Card variant="outlined" sx={{ width: 500, margin: 'auto', backgroundColor: '#fffe92' }}>
         <CardContent>
 
-          <br />
+          <Typography variant="h6" component="h1">
+            TodoList
+          </Typography>
           <Divider />
           <br />
           <Stack direction="row" spacing={2}>
@@ -30,7 +31,7 @@ function Edit(props: AppProps) {
             <Button
               variant="contained"
             >
-              ADD
+              Save
             </Button>
           </Stack>
         </CardContent>

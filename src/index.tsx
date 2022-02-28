@@ -1,11 +1,8 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {
-  BrowserRouter,
   Routes,
   Route,
-  Link,
-  Outlet,
   HashRouter,
 } from 'react-router-dom';
 

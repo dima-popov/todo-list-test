@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-filename-extension */
 import * as React from 'react';
+import './main.css';
 import {
   Container, Card, CardContent, Divider, Checkbox, Stack, Button,
   Typography, TextField, Box, IconButton, List, ListItem, Tooltip, listItemAvatarClasses,
@@ -13,52 +14,25 @@ export interface AppProps {
   lang: string;
 }
 
-interface TodoList {
-  text: string;
-  id: symbol;
-  date: Date,
-  ready: boolean
-}
-
-const list:[number, TodoList][] = [
-
-  [Date.now(), {
-    date: new Date(),
-    text: 'text 1',
-    ready: true,
-    id: Symbol(),
-  }],
-  [Date.now(), {
-    date: new Date(),
-    text: 'text 2',
-    ready: false,
-    id: Symbol(),
-  }],
-  [Date.now(), {
-    date: new Date(),
-    text: 'text 3',
-    ready: false,
-    id: Symbol(),
-  }],
-
-];
-
 function ListForm(props: AppProps) {
-  const [listState, setList] = React.useState(list);
+  const [listState, setList] = React.useState(store.getState().listValue);
   const [inputState, setInput] = React.useState('');
   const sortedList = listState;
+  sortedList.sort((a, b) => b[0] - a[0]);
+  store.subscribe(() => setInput(store.getState().inputValue));
+  store.subscribe(() => {
+    localStorage.setItem('todoList', JSON.stringify(store.getState().listValue));
+    return setList(store.getState().listValue);
+  });
 
   React.useEffect(() => {
-    // console.log(listState);
-    sortedList.sort((a, b) => b[0] - a[0]);
-
-    store.subscribe(() => setInput(store.getState().inputValue));
+    console.log(store.getState());
   }, [listState]);
 
   return (
     <Container sx={{ marginTop: '60px' }}>
 
-      <Card variant="outlined" sx={{ width: 500, margin: 'auto' }}>
+      <Card variant="outlined" sx={{ width: 500, margin: 'auto', backgroundColor: '#fffe92' }}>
         <CardContent>
           <Typography variant="h6" component="h1">
             TodoList
@@ -73,9 +47,9 @@ function ListForm(props: AppProps) {
               return (
                 <ListItem key={i} sx={{ display: 'flex' }}>
                   <Box sx={{ flexGrow: 1, overflow: 'auto' }}>
-                    <Tooltip title={elm.date.toDateString()} placement="top">
+                    <Tooltip title={elm.date} placement="top">
                       <Typography variant="body1" component="span">
-                        {elm.ready == true ? <s>{elm.text}</s> : elm.text }
+                        {elm.ready === true ? <s>{elm.text}</s> : elm.text }
                       </Typography>
                     </Tooltip>
                   </Box>
@@ -83,14 +57,13 @@ function ListForm(props: AppProps) {
 
                     <Checkbox
                       checked={elm.ready}
-                      data-id={elm.id}
-                      onChange={(event) => { elm.ready = event.target.checked; setList([...listState]); }}
+                      onChange={(event) => { elm.ready = event.target.checked; store.dispatch({ type: 'list/update' }); }}
                     />
                     <Link to="/edit"><IconButton aria-label="create" color="primary"><Create /></IconButton></Link>
                     <IconButton
                       aria-label="delete"
                       color="primary"
-                      onClick={(event) => { setList([...listState.filter((e, i) => e[1] != elm)]); }}
+                      onClick={(event) => { store.dispatch({ type: 'list/delete', payload: elm }); }}
                     >
                       <Delete sx={{ color: 'red' }} />
                     </IconButton>
@@ -110,15 +83,14 @@ function ListForm(props: AppProps) {
               id="outlined-basic"
               label="new task"
               variant="outlined"
+              value={inputState}
               onChange={(event) => { store.dispatch({ type: 'input/update', payload: event.target.value }); }}
             />
             <Button
               variant="contained"
               onClick={
   () => {
-    setList([[Date.now(), {
-      text: inputState, ready: false, id: Symbol(), date: new Date(),
-    }], ...listState]);
+    store.dispatch({ type: 'list/add' });
   }
  }
             >
