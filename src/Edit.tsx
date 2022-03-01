@@ -14,7 +14,7 @@ function Edit(props:any) {
   const params = new URLSearchParams(queryString);
   const id = params.get('id');
 
-  const elmArr = store.getState().listValue.filter((elm) => elm[1].id == id);
+  const elmArr = store.getState().listValue.filter((elm) => elm[1].id === id);
 
   const [value, setValue] = React.useState(elmArr[0][1].text);
 
@@ -44,17 +44,17 @@ function Edit(props:any) {
             <Button
               variant="contained"
               onClick={() => {
-                if (confirm("Are you sure you want to edit this item?") == true) {
-                  
-                store.getState().listValue.forEach((elm) => {
-                  if (elm[1].id == id) {
-                    elm[1].text = value;
-                    store.dispatch({ type: 'list/update' });
-                  }
-                });
+                if (window.confirm('Are you sure you want to edit this item?') === true) {
+                  store.getState().listValue.forEach((elm) => {
+                    if (elm[1].id === id) {
+                      const elmCopy = elm[1];
+                      elmCopy.text = value;
+                      store.dispatch({ type: 'list/update' });
+                    }
+                  });
 
-                navigate('/');
-              }
+                  navigate('/');
+                }
               }}
             >
               Save

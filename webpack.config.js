@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 module.exports = {
   entry: './src/index.tsx',
@@ -37,6 +38,7 @@ module.exports = {
       filename: '[name].css',
       chunkFilename: '[id].css',
     }),
+   // new ESLintPlugin({fix: true, extensions: ['js', 'jsx', 'ts', 'tsx']})
   ],
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.jsx', '.json'],

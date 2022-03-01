@@ -2,12 +2,23 @@ import { createStore } from '@reduxjs/toolkit';
 
 let list:[number, any][];
 
-if (localStorage.getItem('todoList') != undefined) {
-  list = JSON.parse(localStorage.getItem('todoList'));
+if (window.localStorage.getItem('todoList') !== null && window.localStorage.getItem('todoList') !== undefined) {
+  list = JSON.parse(window.localStorage.getItem('todoList'));
 } else {
   list = [
 
   ];
+}
+
+function prepID(id: number = 0) {
+  const abc = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+    'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+
+  const idArr = id.toString().split('');
+
+  const abcArr = idArr.map((elm) => abc[Number(elm)]);
+
+  return abcArr.join('');
 }
 
 function counterReducer(state = { inputValue: '', listValue: list }, action:any) {
@@ -15,7 +26,7 @@ function counterReducer(state = { inputValue: '', listValue: list }, action:any)
     case 'input/update':
       return { ...state, inputValue: action.payload };
     case 'list/delete':
-      return { inputValue: state.inputValue, listValue: [...state.listValue.filter((e, i) => e[1] != action.payload)] };
+      return { inputValue: state.inputValue, listValue: [...state.listValue.filter((e, i) => e[1] !== action.payload)] };
     case 'list/add':
       return {
         inputValue: '',
@@ -40,19 +51,8 @@ const store = createStore(counterReducer);
 
 // store.dispatch({type: 'input/update', payload: "todoText"});
 
-function prepID(id: number = 0) {
-  const abc = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
-    'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
-
-  const idArr = id.toString().split('');
-
-  const abcArr = idArr.map((elm) => abc[Number(elm)]);
-
-  return abcArr.join('');
-}
-
 store.subscribe(() => {
-  localStorage.setItem('todoList', JSON.stringify(store.getState().listValue));
+  window.localStorage.setItem('todoList', JSON.stringify(store.getState().listValue));
 });
 
 export { store };

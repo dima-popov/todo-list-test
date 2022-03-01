@@ -3,7 +3,7 @@ import * as React from 'react';
 import './main.css';
 import {
   Container, Card, CardContent, Divider, Checkbox, Stack, Button,
-  Typography, TextField, Box, IconButton, List, ListItem, Tooltip, listItemAvatarClasses,
+  Typography, TextField, Box, IconButton, List, ListItem, Tooltip,
 } from '@mui/material';
 import { Delete, Create } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
@@ -13,7 +13,7 @@ function ListForm(props:any) {
   const [listState, setList] = React.useState(store.getState().listValue);
   const [inputState, setInput] = React.useState('');
   const sortedList = listState;
-  sortedList.sort((a, b) => b[0] - a[0]);
+  sortedList.sort((a, b) => Number(b[0]) - Number(a[0]));
   const setInputUnsubscribe = store.subscribe(() => setInput(store.getState().inputValue));
   const setListUnsubscribe = store.subscribe(() => {
     setList(store.getState().listValue);
@@ -22,7 +22,6 @@ function ListForm(props:any) {
   React.useEffect(
     () =>
     // console.log(store.getState());
-
       () => { setInputUnsubscribe(); setListUnsubscribe(); },
 
     [listState],
@@ -41,7 +40,7 @@ function ListForm(props:any) {
           <List>
 
             {
-            sortedList.map((elmArr, i) => {
+            sortedList.map((elmArr) => {
               const elm = elmArr[1];
               return (
                 <ListItem key={elm.id} sx={{ display: 'flex' }}>
@@ -69,9 +68,9 @@ function ListForm(props:any) {
                     <IconButton
                       aria-label="delete"
                       color="primary"
-                      onClick={(event) => { 
-                        if (confirm("Are you sure you want to delete this item?") == true) {
-                        store.dispatch({ type: 'list/delete', payload: elm }); 
+                      onClick={() => {
+                        if (window.confirm('Are you sure you want to delete this item?') === true) {
+                          store.dispatch({ type: 'list/delete', payload: elm });
                         }
                       }}
                     >
@@ -95,13 +94,12 @@ function ListForm(props:any) {
               variant="outlined"
               value={inputState}
               onChange={(event) => { store.dispatch({ type: 'input/update', payload: event.target.value }); }}
-
               onKeyDown={
                 (event) => {
-                if (event.keyCode === 13) {
-                  store.dispatch({ type: 'list/add' });
+                  if (event.keyCode === 13) {
+                    store.dispatch({ type: 'list/add' });
+                  }
                 }
-              }
             }
             />
             <Button
