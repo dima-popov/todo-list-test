@@ -53,7 +53,7 @@ function ListForm(props:any) {
                   </Box>
                   <Box>
 
-                    <Checkbox
+                    <Checkbox data-testid="check"
                       checked={elm.ready}
                       onChange={(event) => { elm.ready = event.target.checked; store.dispatch({ type: 'list/update' }); }}
                     />

@@ -7,7 +7,7 @@
     "jest": "jest",
     "test": "eslint src/**",
     "fix": "eslint --fix src/**",
-    "build": "webpack",
+    "build": "webpack --mode=production",
     "start": "webpack-dev-server --open"
   },
   "keywords": [],
