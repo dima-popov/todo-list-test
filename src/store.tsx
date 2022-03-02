@@ -6,7 +6,6 @@ if (window.localStorage.getItem('todoList') !== null && window.localStorage.getI
   list = JSON.parse(window.localStorage.getItem('todoList'));
 } else {
   list = [
-
   ];
 }
 

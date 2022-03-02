@@ -1,31 +1,11 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import {
-  Routes,
-  Route,
-  HashRouter,
-} from 'react-router-dom';
+import { App } from './App';
 
-import { ListForm } from './List';
-import { Edit } from './Edit';
 
 ReactDOM.render(
-  <HashRouter>
-    <Routes>
-      <Route path="/" element={<ListForm userName="Developer" lang="TypeScript" />} />
-      <Route path="/edit" element={<Edit userName="Developer" lang="TypeScript" />} />
-      <Route
-        path="*"
-        element={(
-          <main style={{ padding: '1rem' }}>
-            <p>There's nothing here!</p>
-          </main>
-      )}
-      />
-
-    </Routes>
-
-  </HashRouter>,
-
+  <App/>,
   document.getElementById('output'),
 );
+
+

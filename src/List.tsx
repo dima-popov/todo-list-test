@@ -20,10 +20,10 @@ function ListForm(props:any) {
   });
 
   React.useEffect(
-    () =>
+    () => {
     // console.log(store.getState());
-      () => { setInputUnsubscribe(); setListUnsubscribe(); },
-
+      return () => { setInputUnsubscribe(); setListUnsubscribe(); };
+    },
     [listState],
   );
 

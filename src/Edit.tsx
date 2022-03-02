@@ -20,6 +20,10 @@ function Edit(props:any) {
 
   const navigate = useNavigate();
 
+  React.useEffect(
+    () => () => {},
+ [value]);
+
   return (
 
     <Container sx={{ marginTop: '60px' }}>
