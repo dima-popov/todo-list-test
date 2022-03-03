@@ -20,10 +20,9 @@ function ListForm(props:any) {
   });
 
   React.useEffect(
-    () => {
+    () =>
     // console.log(store.getState());
-      return () => { setInputUnsubscribe(); setListUnsubscribe(); };
-    },
+      () => { setInputUnsubscribe(); setListUnsubscribe(); },
     [listState],
   );
 
@@ -53,7 +52,8 @@ function ListForm(props:any) {
                   </Box>
                   <Box>
 
-                    <Checkbox data-testid="check"
+                    <Checkbox
+                      data-testid="check"
                       checked={elm.ready}
                       onChange={(event) => { elm.ready = event.target.checked; store.dispatch({ type: 'list/update' }); }}
                     />
@@ -96,7 +96,11 @@ function ListForm(props:any) {
               onChange={(event) => { store.dispatch({ type: 'input/update', payload: event.target.value }); }}
               onKeyDown={
                 (event) => {
-                  if (event.keyCode === 13) {
+                  if (event.key) {
+                    if (event.key === 'Enter') {
+                      store.dispatch({ type: 'list/add' });
+                    }
+                  } else if (event.keyCode === 13) {
                     store.dispatch({ type: 'list/add' });
                   }
                 }
