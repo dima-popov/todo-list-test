@@ -53,8 +53,6 @@ function ListForm() {
                       checked={elm.ready}
                       onChange={(event) => {
                         elm.ready = event.target.checked;
-                        elmArr[0] = Date.now();
-                        elm.date = `${new Date().toDateString()}, ${new Date().toTimeString()}`;
                         store.dispatch({ type: 'list/update' });
                       }}
                     />

@@ -40,10 +40,11 @@ function Edit() {
               onClick={() => {
                 if (window.confirm('Are you sure you want to edit this item?') === true) {
                   store.getState().listValue.forEach((elm) => {
+                    const elmLoc = elm;
                     if (elm[1].id === id) {
-                      elm[1].text = value;
-                      elm[0] = Date.now();
-                      elm[1].date = `${new Date().toDateString()}, ${new Date().toTimeString()}`;
+                      elmLoc[1].text = value || '------';
+                      elmLoc[0] = Date.now();
+                      elmLoc[1].date = `${new Date().toDateString()}, ${new Date().toTimeString()}`;
                       store.dispatch({ type: 'list/update' });
                     }
                   });

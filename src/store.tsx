@@ -10,7 +10,7 @@ if (window.localStorage.getItem('todoList') !== null && window.localStorage.getI
   ];
 }
 
-function counterReducer(state = { inputValue: '', listValue: list }, action:any) {
+function counterReducer(state = { inputValue: '', listValue: list }, action:any = '') {
   switch (action.type) {
     case 'input/update':
       return { ...state, inputValue: action.payload };
