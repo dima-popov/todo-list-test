@@ -7,22 +7,19 @@ import {
 } from '@mui/material';
 import { Delete, Create } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
-import { store } from './store';
+import store from './store';
 
-function ListForm(props:any) {
+function ListForm() {
   const [listState, setList] = React.useState(store.getState().listValue);
   const [inputState, setInput] = React.useState('');
-  const sortedList = listState;
-  sortedList.sort((a, b) => Number(b[0]) - Number(a[0]));
+  listState.sort((a, b) => Number(b[0]) - Number(a[0]));
   const setInputUnsubscribe = store.subscribe(() => setInput(store.getState().inputValue));
   const setListUnsubscribe = store.subscribe(() => {
     setList(store.getState().listValue);
   });
 
   React.useEffect(
-    () =>
-    // console.log(store.getState());
-      () => { setInputUnsubscribe(); setListUnsubscribe(); },
+    () => () => { setInputUnsubscribe(); setListUnsubscribe(); },
     [listState],
   );
 
@@ -35,11 +32,10 @@ function ListForm(props:any) {
             TodoList
           </Typography>
           <Divider />
-          <br />
           <List>
 
             {
-            sortedList.map((elmArr) => {
+            listState.map((elmArr) => {
               const elm = elmArr[1];
               return (
                 <ListItem key={elm.id} sx={{ display: 'flex' }}>
@@ -55,7 +51,12 @@ function ListForm(props:any) {
                     <Checkbox
                       data-testid="check"
                       checked={elm.ready}
-                      onChange={(event) => { elm.ready = event.target.checked; store.dispatch({ type: 'list/update' }); }}
+                      onChange={(event) => {
+                        elm.ready = event.target.checked;
+                        elmArr[0] = Date.now();
+                        elm.date = `${new Date().toDateString()}, ${new Date().toTimeString()}`;
+                        store.dispatch({ type: 'list/update' });
+                      }}
                     />
                     <Link to={{
                       pathname: '/edit',
@@ -84,10 +85,8 @@ function ListForm(props:any) {
 }
 
           </List>
-          <br />
           <Divider />
-          <br />
-          <Stack direction="row" spacing={2}>
+          <Stack direction="row" spacing={2} mt="20px">
             <TextField
               id="outlined-basic"
               label="new task"
@@ -124,4 +123,4 @@ function ListForm(props:any) {
   );
 }
 
-export { ListForm };
+export default ListForm;

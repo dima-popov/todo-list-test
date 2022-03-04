@@ -4,8 +4,8 @@ import {
   Route,
   HashRouter,
 } from 'react-router-dom';
-import { ListForm } from './List';
-import { Edit } from './Edit';
+import ListForm from './List';
+import Edit from './Edit';
 
 function App() {
   return (
@@ -17,7 +17,7 @@ function App() {
           path="*"
           element={(
             <main style={{ padding: '1rem' }}>
-              <p>There's nothing here!</p>
+              <p>There&rsquo;s nothing here!</p>
             </main>
       )}
         />
@@ -27,4 +27,4 @@ function App() {
   );
 }
 
-export { App };
+export default App;

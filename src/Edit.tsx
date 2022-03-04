@@ -7,35 +7,25 @@ import {
 import {
   useNavigate,
 } from 'react-router-dom';
-import { store } from './store';
+import store from './store';
 
-function Edit(props:any) {
+function Edit() {
   const queryString = window.location.hash.split('?')[1];
   const params = new URLSearchParams(queryString);
   const id = params.get('id');
-
   const elmArr = store.getState().listValue.filter((elm) => elm[1].id === id);
-
   const [value, setValue] = React.useState(elmArr[0][1].text);
-
   const navigate = useNavigate();
-
-  React.useEffect(
-    () => () => {},
- [value]);
 
   return (
 
     <Container sx={{ marginTop: '60px' }}>
-
       <Card variant="outlined" sx={{ width: 500, margin: 'auto', backgroundColor: '#fffe92' }}>
         <CardContent>
-
           <Typography variant="h6" component="h1">
             TodoList
           </Typography>
           <Divider />
-          <br />
           <Stack direction="row" spacing={2}>
             <TextField
               autoFocus
@@ -51,8 +41,9 @@ function Edit(props:any) {
                 if (window.confirm('Are you sure you want to edit this item?') === true) {
                   store.getState().listValue.forEach((elm) => {
                     if (elm[1].id === id) {
-                      const elmCopy = elm[1];
-                      elmCopy.text = value;
+                      elm[1].text = value;
+                      elm[0] = Date.now();
+                      elm[1].date = `${new Date().toDateString()}, ${new Date().toTimeString()}`;
                       store.dispatch({ type: 'list/update' });
                     }
                   });
@@ -70,4 +61,4 @@ function Edit(props:any) {
   );
 }
 
-export { Edit };
+export default Edit;

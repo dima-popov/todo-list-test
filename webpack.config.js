@@ -36,7 +36,7 @@ module.exports = {
       filename: '[name].css',
       chunkFilename: '[id].css',
     }),
-   // new ESLintPlugin({fix: true, extensions: ['js', 'jsx', 'ts', 'tsx']})
+  // new ESLintPlugin({fix: true, extensions: ['js', 'jsx', 'ts', 'tsx']})
   ],
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.jsx', '.json'],
