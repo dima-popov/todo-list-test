@@ -25,7 +25,7 @@ function counterReducer(state = { inputValue: '', listValue: list }, action:any)
         listValue: [
           ...state.listValue,
           [Date.now(), {
-            text: state.inputValue,
+            text: state.inputValue || '------',
             ready: false,
             id: uuidv4(),
             date: `${new Date().toDateString()}, ${new Date().toTimeString()}`,

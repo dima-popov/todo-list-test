@@ -1,13 +1,12 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import { App } from './App';
+import App from './App';
 
 describe('List', () => {
-  test('renders List component', () => {
+  test('Renders List component', () => {
     render(<App />);
-    //   screen.debug();
+    screen.debug();
     expect(screen.getByText('TodoList')).toBeInTheDocument();
   });
 
@@ -16,7 +15,7 @@ describe('List', () => {
     const input = screen.getByLabelText('new task');
     fireEvent.change(input, { target: { value: 'test item text1' } });
     fireEvent.click(screen.getByText('ADD'));
-    //   screen.debug();
+    screen.debug();
     expect(screen.getByText('test item text1')).toBeInTheDocument();
   });
 
@@ -25,18 +24,18 @@ describe('List', () => {
     const input = screen.getByLabelText('new task');
     fireEvent.change(input, { target: { value: 'test item text2' } });
     fireEvent.keyDown(input, { key: "Enter", keyCode: 13 });
-    //  screen.debug();
+    screen.debug();
     expect(screen.getByText('test item text2')).toBeInTheDocument();
   });
 
-  test('delete button', () => {
+  test('Delete button', () => {
     render(<App />);
     window.confirm = jest.fn(() => true);
     const deleteButton = screen.getAllByLabelText('delete');
     deleteButton.forEach((elm) => {
       fireEvent.click(elm);
     });
-    //   screen.debug();
+    screen.debug();
     expect(screen.queryByLabelText('delete')).not.toBeInTheDocument();
   });
 
@@ -48,7 +47,7 @@ describe('List', () => {
     const checkButton = screen.getByTestId('check').querySelector('input');
     fireEvent.click(checkButton);
     const sTag = container.querySelector('s');
-    // screen.debug();
+    screen.debug();
     expect(sTag).toBeInTheDocument();
   });
 });
