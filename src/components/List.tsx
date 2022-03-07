@@ -1,13 +1,13 @@
 /* eslint-disable react/jsx-filename-extension */
 import * as React from 'react';
-import './main.css';
+import '../main.css';
 import {
   Container, Card, CardContent, Divider, Checkbox, Stack, Button,
   Typography, TextField, Box, IconButton, List, ListItem, Tooltip,
 } from '@mui/material';
 import { Delete, Create } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
-import store from './store';
+import store from '../services/store';
 
 function ListForm() {
   const [listState, setList] = React.useState(store.getState().listValue);

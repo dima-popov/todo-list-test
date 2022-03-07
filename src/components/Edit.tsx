@@ -7,7 +7,7 @@ import {
 import {
   useNavigate,
 } from 'react-router-dom';
-import store from './store';
+import store from '../services/store';
 
 function Edit() {
   const queryString = window.location.hash.split('?')[1];

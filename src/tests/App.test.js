@@ -1,10 +1,10 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import App from './App';
+import App from '../components/App';
 
 describe('List', () => {
-  test('Renders List component', () => {
+  test('Rendering of List component', () => {
     render(<App />);
     screen.debug();
     expect(screen.getByText('TodoList')).toBeInTheDocument();
@@ -39,7 +39,7 @@ describe('List', () => {
     expect(screen.queryByLabelText('delete')).not.toBeInTheDocument();
   });
 
-  test('delete button', () => {
+  test('Check button', () => {
     const { container } = render(<App />);
     const input = screen.getByLabelText('new task');
     fireEvent.change(input, { target: { value: 'test item text3' } });
@@ -53,7 +53,7 @@ describe('List', () => {
 });
 
 describe('Edit', () => {
-  test('renders Edit component', () => {
+  test('Rendering of Edit component', () => {
     render(<App />);
     fireEvent.click(screen.getByTestId('CreateIcon'));
     screen.debug();
