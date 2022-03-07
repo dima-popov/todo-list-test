@@ -1,14 +1,8 @@
 import { createStore } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
+import { getData, setData } from './data';
 
-let list:[number, any][];
-
-if (window.localStorage.getItem('todoList') !== null && window.localStorage.getItem('todoList') !== undefined) {
-  list = JSON.parse(window.localStorage.getItem('todoList'));
-} else {
-  list = [
-  ];
-}
+const list:[number, any][] = getData();
 
 function counterReducer(state = { inputValue: '', listValue: list }, action:any = '') {
   switch (action.type) {
@@ -43,7 +37,7 @@ function counterReducer(state = { inputValue: '', listValue: list }, action:any 
 const store = createStore(counterReducer);
 
 store.subscribe(() => {
-  window.localStorage.setItem('todoList', JSON.stringify(store.getState().listValue));
+  setData(JSON.stringify(store.getState().listValue));
 });
 
 export default store;
